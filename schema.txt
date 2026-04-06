@@ -1,0 +1,126 @@
+// -------------- CUSTOMERS --------------
+Table customers [icon: azure-my-customers] {
+  id int [pk]
+  name varchar
+  phone varchar
+  email varchar
+}
+
+
+// -------------- CATEGORIES --------------
+Table categories [icon: list] {
+  id int [pk]
+  name varchar
+}
+
+
+// -------------- PRODUCTS --------------
+Table products [icon: shopping-cart] {
+  id int [pk]
+  name varchar
+  description text
+  price decimal
+  product_type varchar
+  category_id int [ref: > categories.id]
+}
+
+
+// -------------- PRODUCTS VARIANTS --------------
+Table product_variants [colorMode: pastel, color: Black, styleMode: plain] {
+  id int [pk]
+  product_id int [ref: > products.id]
+  size varchar
+  color varchar
+  condition varchar
+  price decimal
+}
+
+
+// -------------- INVENTORY --------------
+Table inventory [icon: database] {
+  id int [pk]
+  variant_id int [ref: > product_variants.id]
+  quantity int
+  updated_at datetime
+}
+
+
+// -------------- ORDERS --------------
+Table orders [icon: shopping-bag] {
+  id int [pk]
+  customer_id int [ref: > customers.id]
+  order_date datetime
+  total_amount decimal
+  status varchar
+}
+
+
+// -------------- ORDERS ITEMS --------------
+Table order_items [icon: list] {
+  id int [pk]
+  order_id int [ref: > orders.id]
+  variant_id int [ref: > product_variants.id]
+  quantity int
+  price_at_purchase decimal
+}
+
+
+// -------------- PAYMENTS --------------
+Table payments [icon: aws-payment-cryptography] {
+  id int [pk]
+  order_id int [ref: > orders.id]
+  status varchar
+  method varchar
+  payment_date datetime
+}
+
+
+// -------------- SHIPPING --------------
+Table shipping [icon: truck] {
+  id int [pk]
+  order_id int [ref: > orders.id]
+  status varchar
+  tracking_number varchar
+  delivery_date datetime
+}
+
+
+// -------------- CUSTOMER DETAILS --------------
+Table customer_details {
+  id int [pk]
+  customer_id int [ref: > customers.id]
+  address text
+  city varchar
+  pincode varchar
+  country varchar
+} 
+
+
+
+------------------ Relationship Summary ------------------
+
+customers.id <-- customer_details.customer_id
+
+customers.id <-- orders.customer_id
+
+orders.id    <-- shipping.order_id
+
+orders.id    <-- payments.order_id
+
+orders.id    <-- order_items.order_id
+
+product_variants.id  <-- order_items.variant_id
+
+products.id  <-- product_variants.product_id 
+
+categories.id  <-- products.category_id
+
+
+
+
+
+
+
+
+
+
